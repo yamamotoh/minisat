@@ -136,11 +136,11 @@ int main(int argc, char** argv)
         
         if (S.verbosity > 0){
             printf("|  変数の数:  %12d                                                    |\n", S.nVars());
-            printf("|  節  の数:    %12d                                         |\n", S.nClauses()); }
+            printf("|  節  の数:    %12d                                                  |\n", S.nClauses()); }
         
         double parsed_time = cpuTime();
         if (S.verbosity > 0){
-            printf("|  解析までの時間 :           %12.2f s                                        |\n", parsed_time - initial_time);
+            printf("|  解析までの時間 :           %9.2f s                                     |\n", parsed_time - initial_time);
             printf("|                                                                             |\n"); }
  
         // Change to signal-handlers that will only notify the solver and allow it to terminate
