@@ -763,8 +763,8 @@ lbool Solver::solve_()
 
     if (verbosity >= 1){
         printf("============================[ Search Statistics ]==============================\n");
-        printf("| Conflicts |          ORIGINAL         |          LEARNT          | Progress |\n");
-        printf("|           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |\n");
+        printf("| 矛盾      |          ORIGINAL         |          LEARNT          | Progress |\n");
+        printf("|           |    Vars    節    りてらる |   Limit    節     Lit/Cl |          |\n");
         printf("===============================================================================\n");
     }
 
@@ -866,7 +866,7 @@ void Solver::toDimacs(FILE* f, const vec<Lit>& assumps)
         toDimacs(f, ca[clauses[i]], map, max);
 
     if (verbosity > 0)
-        printf("Wrote %d clauses with %d variables.\n", cnt, max);
+        printf("Wrote %d 節 with %d variables.\n", cnt, max);
 }
 
 
