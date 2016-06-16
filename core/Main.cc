@@ -43,8 +43,8 @@ void printStats(Solver& solver)
     printf("決定             : %-12"PRIu64"   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
     printf("伝播          : %-12"PRIu64"   (%.0f /sec)\n", solver.propagations, solver.propagations/cpu_time);
     printf("矛盾りてらる  : %-12"PRIu64"   (%4.2f %% deleted)\n", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
-    if (mem_used != 0) printf("Memory used           : %.2f MB\n", mem_used);
-    printf("CPU time              : %g s\n", cpu_time);
+    if (mem_used != 0) printf("メモり使用           : %.2f MB\n", mem_used);
+    printf("CPU時間           : %g s\n", cpu_time);
 }
 
 
@@ -57,10 +57,10 @@ static void SIGINT_interrupt(int signum) { solver->interrupt(); }
 // destructors and may cause deadlocks if a malloc/free function happens to be running (these
 // functions are guarded by locks for multithreaded use).
 static void SIGINT_exit(int signum) {
-    printf("\n"); printf("*** INTERRUPTED ***\n");
+    printf("\n"); printf("***   中  断   ***\n");
     if (solver->verbosity > 0){
         printStats(*solver);
-        printf("\n"); printf("*** INTERRUPTED ***\n"); }
+        printf("\n"); printf("***   中  断   ***\n"); }
     _exit(1); }
 
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 #if defined(__linux__)
         fpu_control_t oldcw, newcw;
         _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
-        printf("WARNING: for repeatability, setting FPU to use double precision\n");
+        printf("警告：再現性のために、FPUを設定して二倍精度を利用する。\n");
 #endif
         // Extra options:
         //
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
             printf("ERROR! Could not open file: %s\n", argc == 1 ? "<stdin>" : argv[1]), exit(1);
         
         if (S.verbosity > 0){
-            printf("============================[ Problem Statistics ]=============================\n");
+            printf("============================[     問題の統計     ]=============================\n");
             printf("|                                                                             |\n"); }
         
         parse_DIMACS(in, S);
@@ -135,12 +135,12 @@ int main(int argc, char** argv)
         FILE* res = (argc >= 3) ? fopen(argv[2], "wb") : NULL;
         
         if (S.verbosity > 0){
-            printf("|  Number of variables:  %12d                                         |\n", S.nVars());
-            printf("|  Number of clauses:    %12d                                         |\n", S.nClauses()); }
+            printf("|  変数の数:  %12d                                                    |\n", S.nVars());
+            printf("|  節  の数:    %12d                                         |\n", S.nClauses()); }
         
         double parsed_time = cpuTime();
         if (S.verbosity > 0){
-            printf("|  Parse time:           %12.2f s                                       |\n", parsed_time - initial_time);
+            printf("|  解析までの時間 :           %12.2f s                                        |\n", parsed_time - initial_time);
             printf("|                                                                             |\n"); }
  
         // Change to signal-handlers that will only notify the solver and allow it to terminate
@@ -155,7 +155,7 @@ int main(int argc, char** argv)
                 printf("Solved by unit propagation\n");
                 printStats(S);
                 printf("\n"); }
-            printf("UNSATISFIABLE\n");
+            printf("充足不能\n");
             exit(20);
         }
         
@@ -164,7 +164,7 @@ int main(int argc, char** argv)
         if (S.verbosity > 0){
             printStats(S);
             printf("\n"); }
-        printf(ret == l_True ? "SATISFIABLE\n" : ret == l_False ? "UNSATISFIABLE\n" : "INDETERMINATE\n");
+        printf(ret == l_True ? "充足可能\n" : ret == l_False ? "充足不能\n" : "INDETERMINATE\n");
         if (res != NULL){
             if (ret == l_True){
                 fprintf(res, "SAT\n");
